@@ -25,13 +25,7 @@ app.use express.errorHandler()  if "development" is app.get("env")
 app.get "/", (req, res) ->
   res.sendfile 'public/index.html'
 
-app.get "/t", (req, res) ->
-  res.redirect "https://docs.google.com/presentation/d/18WeBl7R9LaM91Fx9ouRyDb8jWGGhRsZMr09GTtEfMqM/edit?usp=sharing"
-
-
 app.post "/upp", (req, res) ->
-  console.log "uppp!"
-  console.log req.files.dataFile
   if Array.isArray req.files.dataFile
     res.send [file.path for file in req.files.dataFile].join()
   else
@@ -41,7 +35,6 @@ basename = (str) ->
   (str.match /\/([^\.\/]*)\.*[^\/\.]*$/)[1]
 
 app.post "/rnder", (req, res) ->
-  console.log req.body
   {labelNameX, labelNameY, graphTitle} = req.body
   async.waterfall [
     (cb) ->
@@ -69,39 +62,6 @@ app.post "/rnder", (req, res) ->
         res.send {err: JSON.stringify err}
       else
         res.json ret
-
-app.post "/rnderold", (req, res) ->
-  console.log JSON.stringify(req.body)
-
-  #exec "echo '#{JSON.stringify req.body}' | lua bbb.lua", (err, stdout, stderr) ->
-  #  if err?
-  #    console.log stdout
-  #    console.error stderr
-  #    return res.send 500
-#
-  #  console.log stdout
-
-  b = req.body
-
-  console.log "convert -loop 0 `env F=#{req.body.dataPath} TITLE=hoge lua 01.lua` public/anim.gif"
-  exec "convert -loop 0 `env F=#{b.dataPath} TITLE=#{b.graphTitle} X=#{b.labelNameX} Y=#{b.labelNameY} lua 01.lua` public/anim.gif",(err, stdout, stderr) ->
-    if err?
-      console.log stdout
-      console.error stderr
-      return res.send 500
-    res.json {
-      thumb: "/anim.gif"
-      orig: "/anim.gif"
-    }
-
-
-  #setTimeout ->
-  #  res.json {
-  #    thumb: "/bb.png"
-  #    orig: "/dumy.png"
-  #  }
-  #, 1000
-
 
 http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
