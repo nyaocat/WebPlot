@@ -1,3 +1,3 @@
 
 c:c2.cpp
-	g++ -o c c2.cpp  `pkg-config --cflags --libs plplotd-c++` -std=gnu++0x 
+	g++ -o c c2.cpp  `pkg-config --cflags --libs plplotd-c++`
