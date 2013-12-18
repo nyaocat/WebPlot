@@ -33,13 +33,19 @@ html
     .jumbotron
       .container
         h1 WebPlot
-        p.
-          WebPlotへようこそ.
-          これは，ブラウザ上からグラフのプロット・アニメーション生成の行えるツールです．
+        p
+          | WebPlotへようこそ.
+          br
+          | ブラウザ上からグラフのプロット・アニメーション生成を行えるサービスです．
+        p
+          a.btn.btn-primary.btn-lg(href='https://github.com/nyaocat/WebPlot') View It On Github
 
-        .alert.alert-info 複数ファイルをアップロードすると自動的にアニメーションになります
-        .alert.alert-warning ファイル形式は全て一行一データ，X座標-Y座標-値の空白区切りである必要があります
     .container
+      .alert.alert-info
+        | 複数ファイルをアップロードすると自動的にアニメーションになります．
+        br
+        | アニメーションはファイル名の昇順に行われます
+      .alert.alert-warning ファイル形式は全て一行一データ，X座標-Y座標-値の空白区切りである必要があります
       form#thatForm.form-horizontal(role='form')
         #Fields
           .form-group
@@ -72,12 +78,14 @@ html
               input#colorFG.form-control(type='text', name='colorFG', placeholder='#FFFFFF')
           .form-group
             label.col-lg-2.control-label(for='dateFile') データファイル
+              span.badge.pull-right 必須
+              span.badge.pull-right 複数ファイル可
             .col-lg-10
               input#dataFile.form-control(type='file', name='dataFile', multiple='multiple')
             input#dataPath(type='hidden', name='dataPath', value='')
         .form-group
           .col-lg-offset-2.col-lg-10
-            button#thatSubmit.btn.btn-primary.btn-block(type='submit') プロット実行
+            button#thatSubmit.btn.btn-primary.disabled.btn-block(type='submit') プロット実行
     #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog
         .modal-content
