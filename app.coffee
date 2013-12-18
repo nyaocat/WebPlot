@@ -38,17 +38,22 @@ basename = (str) ->
   (str.match /\/([^\.\/]*)\.*[^\/\.]*$/)[1]
 
 app.post "/rnder", (req, res) ->
+  console.log req.body
   {labelNameX, labelNameY, graphTitle} = req.body
   async.waterfall [
     (cb) ->
-      async.map req.body.dataPath.split(','), ((inpath, cb) ->
-        outpath = "public/images/#{basename inpath}.png"
-        exec "env X=#{labelNameX} Y=#{labelNameY} TITLE=#{graphTitle} F=#{inpath} ./c -dev pngcairo -o #{outpath}", (err, stdout, stderr) ->
-          if err
-            cb stderr
-          else
-            cb null, outpath
-      ), cb
+      env =
+        X: labelNameX
+        Y: labelNameY
+        TITLE: graphTitle
+        F: req.body.dataPath
+        D: "pngcairo"
+      exec "./c", {env:env}, (err, stdout, stderr) ->
+        if err
+          cb stderr
+        else
+          console.log stdout
+          cb null, stdout.split(',')
     (files, cb) ->
       async.parallel {
         thumb: (cb) ->

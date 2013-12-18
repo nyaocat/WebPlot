@@ -6,41 +6,49 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <string>
 #include "plstream.h"
 
 using namespace std;
 
-class Sample{
-public:
-    Sample( int, const char ** );
-  void plot();
-  void set_colormap();
-private:
+vector<string> split(const string &str, char delim){
+  vector<string> res;
+  size_t current = 0, found;
+  while((found = str.find_first_of(delim, current)) != string::npos){
+    res.push_back(string(str, current, found - current));
+    current = found + 1;
+  }
+  res.push_back(string(str, current, str.size() - current));
+  return res;
+}
+std::string basename(const std::string& path) {
+    return path.substr(path.find_last_of('/') + 1);
+}
+void plot( int argc, const char ** argv, char const* device, char const* inpath, char const* outpath)
+{
   plstream *pls;
   PLFLT    **z;
   PLcGrid2 cgrid2;
-};
 
-Sample::Sample( int argc, const char ** argv ){
-    pls = new plstream();
-    pls->parseopts(&argc,argv,PL_PARSE_FULL);
-    pls->scolbg(255, 255, 255);
-    pls ->scol0(15, 0, 0, 0);
-    // Initialize plplot
-    pls->init();
-}
+  pls = new plstream();
+  pls->sdev(device);
+  pls->sfnam(outpath);
+  pls->parseopts(&argc,argv,PL_PARSE_FULL);
+  pls->scolbg(255, 255, 255);
+  pls ->scol0(15, 0, 0, 0);
+  // Initialize plplot
+  pls->init();
 
-void Sample::set_colormap(){
-  //set color map
+  {
+    //set color map
     PLFLT y[4]={-1.0,-1.0, 1.0, 1.0};
     PLFLT r[2]={0.0,1.0};
     PLFLT g[2]={0.0,0.0};
     PLFLT b[2]={1.0,0.0};
     PLFLT pos[2]={0.0,1.0};
     pls->scmap1l(true,2,pos,r,g,b,NULL);
-}
-
-void Sample::plot(){
+  }
+  { // plot
     double xmin=0.0;
     double xmax=2.0;
     double ymin=0.0;
@@ -59,7 +67,7 @@ void Sample::plot(){
     {
       std::vector<double> zs;
       zs.reserve(nx * ny);
-      std::ifstream ifs(getenv("F"));
+      std::ifstream ifs(inpath);
       for(int i=0;i<nx;i++){
         for(int j=0;j<ny;j++){
           double x, y, z_;
@@ -99,13 +107,21 @@ void Sample::plot(){
     pls->Free2dGrid(z,nx,ny);
 
     delete pls;
+  }
 }
+
 
 int main( int argc, const char ** argv )
 {
-    Sample *x = new Sample( argc, argv );
-    x->set_colormap();
-    x->plot();
-    delete x;
+    std::vector<string> const fs = split(getenv("F"), ',');
+
+    for (std::vector<string>::const_iterator it = fs.begin(); it != fs.end(); ++it)
+    {
+      std::string const& f = *it;
+      std::string const outpath = ("public/images/"+basename(f)+".png");
+      plot( argc, argv, getenv("D"), f.c_str(), outpath.c_str());
+      std::cout << outpath << ",";
+    }
+
     return 0;
 }
