@@ -22,7 +22,7 @@ $(function() {
         $("#myImg").css("display", "block");
         $("#myImg").attr("src", p.thumb);
         $("#dBtn").removeClass("disabled");
-        return $("#dBtn").attr("href", p.orig);
+        return $("#dBtn").attr("href", "/download/" + p.thumb);
       }
     }), "json");
     return false;
@@ -32,6 +32,7 @@ $(function() {
     $("#thatForm").unbind('submit');
     return $(this).upload("/upp", (function(res) {
       console.log(res);
+      $("#thatSubmit").removeClass("disabled");
       $("#dataPath").val(res);
       return $("#thatForm").submit(rndr);
     }), "text");

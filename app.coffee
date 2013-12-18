@@ -25,6 +25,9 @@ app.use express.errorHandler()  if "development" is app.get("env")
 app.get '/', (req, res) ->
   res.render 'index'
 
+app.get '/download/:file', (req, res) ->
+  res.download "./public/#{req.params.file}"
+
 app.post "/upp", (req, res) ->
   if Array.isArray req.files.dataFile
     res.send [file.path for file in req.files.dataFile].join()

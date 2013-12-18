@@ -17,7 +17,7 @@ $ ->
         $("#myImg").css "display", "block"
         $("#myImg").attr "src", p.thumb
         $("#dBtn").removeClass "disabled"
-        $("#dBtn").attr "href", p.orig
+        $("#dBtn").attr "href", "/download/#{p.thumb}"
     ), "json"
     false
 
@@ -26,6 +26,7 @@ $ ->
     $("#thatForm").unbind 'submit'
     $(this).upload "/upp", ((res) ->
       console.log res
+      $("#thatSubmit").removeClass "disabled"
       $("#dataPath").val res
       $("#thatForm").submit rndr
     ), "text"
