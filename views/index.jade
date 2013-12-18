@@ -30,10 +30,15 @@ html
             li
               p.navbar-text.pull-right beta
         ///.nav-collapse
-    .container
-      .starter-template
+    .jumbotron
+      .container
         h1 WebPlot
-        p.lead データプロット
+        p.
+          WebPlotへようこそ.
+          これは，ブラウザ上からグラフのプロット・アニメーション生成の行えるツールです．
+
+        .alert.alert-info 複数ファイルをアップロードすると自動的にアニメーションになります
+        .alert.alert-warning ファイル形式は全て一行一データ，X座標-Y座標-値の空白区切りである必要があります
     .container
       form#thatForm.form-horizontal(role='form')
         #Fields
@@ -51,11 +56,12 @@ html
               input#labelNameY.form-control(type='text', name='labelNameY', placeholder='Y')
           .form-group
             label.col-lg-2.control-label(for='graphType') 描画グラフ種類
-            .col-lg-10
+            .col-lg-10.input-group
               select#graphType.form-control.input-lg(name='graphType')
                 option 直線
                 option ベクトル
                 option 偽色
+              span.input-group-addon グラフ
           .form-group
             label.col-lg-2.control-label(for='colorBG') 背景色
             .col-lg-10
@@ -69,17 +75,9 @@ html
             .col-lg-10
               input#dataFile.form-control(type='file', name='dataFile', multiple='multiple')
             input#dataPath(type='hidden', name='dataPath', value='')
-          .form-group
-            label.col-lg-2.control-label(for='fileType') 生成するファイル形式
-            .col-lg-10
-              select#fileType.form-control(name='fileType')
-                option svg
-                //<option>ps</option>
-              <option>png</option>
         .form-group
           .col-lg-offset-2.col-lg-10
-            button#thatSubmit.btn.btn-primary.btn-block(type='submit') 描画
-            //<a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg" onclick="doThat()">Launch demo modal</a>
+            button#thatSubmit.btn.btn-primary.btn-block(type='submit') プロット実行
     #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog
         .modal-content
