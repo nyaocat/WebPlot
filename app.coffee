@@ -29,8 +29,13 @@ app.get '/download/:file', (req, res) ->
   res.download "./public/#{req.params.file}"
 
 app.post "/upp", (req, res) ->
+  console.log req.files
   if Array.isArray req.files.dataFile
-    res.send [file.path for file in req.files.dataFile].join()
+    res.send [file.path for file in req.files.dataFile].sort( (l,r) ->
+      return -1 if( l.name < r.name )
+      return 1  if( l.name > r.name )
+      return 0
+    ).join()
   else
     res.send req.files.dataFile.path
 
@@ -47,7 +52,7 @@ app.post "/rnder", (req, res) ->
         Y: labelNameY
         TITLE: graphTitle
         F: req.body.dataPath
-        D: "pngcairo"
+        D: "gif"
       exec "./c", {env:env}, (err, stdout, stderr) ->
         if err
           cb stderr
