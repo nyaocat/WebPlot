@@ -36,15 +36,15 @@ html
           .form-group
             label.col-lg-2.control-label(for='graphTitle') グラフのタイトル
             .col-lg-10
-              input#graphTitle.form-control(type='text', name='graphTitle', placeholder='グラフ１')
+              input#graphTitle.form-control(type='text', name='graphTitle', value='グラフ')
           .form-group
             label.col-lg-2.control-label(for='labelNameX') X軸のラベル名
             .col-lg-10
-              input#labelNameX.form-control(type='text', name='labelNameX', placeholder='X')
+              input#labelNameX.form-control(type='text', name='labelNameX', value='X')
           .form-group
             label.col-lg-2.control-label(for='labelNameY') Y軸のラベル名
             .col-lg-10
-              input#labelNameY.form-control(type='text', name='labelNameY', placeholder='Y')
+              input#labelNameY.form-control(type='text', name='labelNameY', value='Y')
           .form-group
             label.col-lg-2.control-label(for='graphType') 描画グラフ種類
             .col-lg-10.input-group
@@ -53,14 +53,6 @@ html
                 option ベクトル
                 option 偽色
               span.input-group-addon グラフ
-          .form-group
-            label.col-lg-2.control-label(for='colorBG') 背景色
-            .col-lg-10
-              input#colorBG.form-control(type='text', name='colorBG', placeholder='#000000')
-          .form-group
-            label.col-lg-2.control-label(for='colorFG') 前景色
-            .col-lg-10
-              input#colorFG.form-control(type='text', name='colorFG', placeholder='#FFFFFF')
           .form-group
             label.col-lg-2.control-label(for='dateFile') データファイル
               span.badge.pull-right 必須
