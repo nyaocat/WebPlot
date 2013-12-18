@@ -23,7 +23,7 @@ html
           br
           | ブラウザ上からグラフのプロット・アニメーション生成を行えるサービスです．
         p
-          a.btn.btn-primary.btn-lg(href='https://github.com/nyaocat/WebPlot') View It On Github
+          a.btn.btn-info.btn-lg(href='https://github.com/nyaocat/WebPlot') View It On Github
 
     .container
       .alert.alert-info
@@ -70,9 +70,11 @@ html
           .modal-body
             img#myImg.img-thumbnail(src='', alt='プロットプレビュー', style='display:none;')
             span#rndMes
-            #myBar.progress.progress-striped.active
-              .progress-bar(role='progressbar', aria-valuenow='100', aria-valuemin='0', aria-valuemax='100', style='width: 100%')
-                span.sr-only グラフ生成中…
+            #myBar
+              .alert.alert-info グラフのプロットには数秒〜数十分掛かります．
+              .progress.progress-striped.active
+                .progress-bar(role='progressbar', aria-valuenow='100', aria-valuemin='0', aria-valuemax='100', style='width: 100%')
+                  span.sr-only グラフ生成中…
           .modal-footer
             button.btn.btn-default(type='button', data-dismiss='modal') 閉じる
             a#dBtn.btn.btn-primary.disabled(href='') ファイルをダウンロード
