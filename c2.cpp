@@ -182,7 +182,7 @@ int main( int argc, const char ** argv )
     for (std::vector<string>::const_iterator it = fs.begin(); it != fs.end(); ++it)
     {
       std::string const& f = *it;
-      std::string const outpath = ("public/images/"+basename(f)+".png");
+      std::string const outpath = ("public/"+basename(f)+".png");
       plot( argc, argv, getenv("D"), f.c_str(), outpath.c_str(), opts);
       std::cout << outpath << ",";
     }
