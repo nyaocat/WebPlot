@@ -6,6 +6,7 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <set>
 #include <string>
 #include "plstream.h"
 
@@ -24,7 +25,71 @@ vector<string> split(const string &str, char delim){
 std::string basename(const std::string& path) {
     return path.substr(path.find_last_of('/') + 1);
 }
-void plot( int argc, const char ** argv, char const* device, char const* inpath, char const* outpath)
+
+struct DataOpts
+{
+  int nx;
+  int ny;
+  double xmin;
+  double xmax;
+  double ymin;
+  double ymax;
+  double zmin;
+  double zmax;
+};
+
+DataOpts filecheck(std::vector<string> const& fs)
+{
+  DataOpts opts = {0, 0, 0, 0, 0, 0, 0, 0};
+
+  set<double> xs, ys, xs_, ys_;
+
+  bool isfirst = true;
+
+  for (std::vector<string>::const_iterator it = fs.begin(); it != fs.end(); ++it)
+  {
+    std::string const& f = *it;
+    xs_.clear(); ys_.clear();
+
+    std::ifstream ifs(f.c_str());
+    while (ifs)
+    {
+      double x, y, z;
+      ifs >> x >> y >> z;
+
+      opts.xmin = std::min(opts.xmin, x);
+      opts.ymin = std::min(opts.ymin, y);
+      opts.zmin = std::min(opts.zmin, z);
+      opts.xmax = std::max(opts.xmax, x);
+      opts.ymax = std::max(opts.ymax, y);
+      opts.zmax = std::max(opts.zmax, z);
+
+      xs_.insert(x);
+      ys_.insert(y);
+    }
+
+    if (isfirst)
+    {
+      isfirst = false;
+    }
+    else
+    {
+      if (xs.size() != xs_.size() || ys.size() != ys_.size())
+      {
+        std::cerr << "X要素数とY要素数が一致しません：ファイルのエラー" << std::endl;
+      }
+      xs.swap(xs_);
+      ys.swap(ys_);
+    }
+  }
+
+  opts.nx = xs.size();
+  opts.ny = ys.size();
+
+  return opts;
+}
+
+void plot( int argc, const char ** argv, char const* device, char const* inpath, char const* outpath, DataOpts const& opts)
 {
   plstream *pls;
   PLFLT    **z;
@@ -49,13 +114,13 @@ void plot( int argc, const char ** argv, char const* device, char const* inpath,
     pls->scmap1l(true,2,pos,r,g,b,NULL);
   }
   { // plot
-    double xmin=0.0;
-    double xmax=2.0;
-    double ymin=0.0;
-    double ymax=2.0;
+    double xmin=opts.xmin;
+    double xmax=opts.xmax;
+    double ymin=opts.ymin;
+    double ymax=opts.ymax;
     int ns = 201;
-    int nx = 41;
-    int ny = 41;
+    int nx = opts.nx;
+    int ny = opts.ny;
     // Allocate arrays
     PLFLT **z;
     pls->Alloc2dGrid(&z,nx,ny);
@@ -65,23 +130,20 @@ void plot( int argc, const char ** argv, char const* device, char const* inpath,
     cgrid2.nx=nx;
     cgrid2.ny=ny;
     {
-      std::vector<double> zs;
-      zs.reserve(nx * ny);
       std::ifstream ifs(inpath);
       for(int i=0;i<nx;i++){
         for(int j=0;j<ny;j++){
           double x, y, z_;
           ifs >> x >> y >> z_;
-          zs.push_back(z_);
           cgrid2.xg[i][j] = x;
           cgrid2.yg[i][j] = y;
           z[i][j]         = z_;
         }
       }
-      const double zmax = *max_element(zs.begin(), zs.end());
+      const double zmax = opts.zmax;
       for(int i=0;i<nx;i++){
         for(int j=0;j<ny;j++){
-          z[i][j]         = (z[i][j] / 0.007072 ) * 0.95;
+          z[i][j]         = (z[i][j] / zmax ) * 0.95;
         }
       }
     }
@@ -115,11 +177,13 @@ int main( int argc, const char ** argv )
 {
     std::vector<string> const fs = split(getenv("F"), ',');
 
+    DataOpts const opts = filecheck(fs);
+
     for (std::vector<string>::const_iterator it = fs.begin(); it != fs.end(); ++it)
     {
       std::string const& f = *it;
       std::string const outpath = ("public/images/"+basename(f)+".png");
-      plot( argc, argv, getenv("D"), f.c_str(), outpath.c_str());
+      plot( argc, argv, getenv("D"), f.c_str(), outpath.c_str(), opts);
       std::cout << outpath << ",";
     }
 
