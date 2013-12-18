@@ -22,8 +22,8 @@ app.use express.static(path.join(__dirname, "public"))
 # development only
 app.use express.errorHandler()  if "development" is app.get("env")
 
-app.get "/", (req, res) ->
-  res.sendfile 'public/index.html'
+app.get '/', (req, res) ->
+  res.render 'index'
 
 app.post "/upp", (req, res) ->
   if Array.isArray req.files.dataFile
