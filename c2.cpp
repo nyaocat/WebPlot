@@ -78,9 +78,9 @@ DataOpts filecheck(std::vector<string> const& fs)
       {
         std::cerr << "X要素数とY要素数が一致しません：ファイルのエラー" << std::endl;
       }
-      xs.swap(xs_);
-      ys.swap(ys_);
     }
+    xs.swap(xs_);
+    ys.swap(ys_);
   }
 
   opts.nx = xs.size();
