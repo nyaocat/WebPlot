@@ -52,7 +52,7 @@ app.post "/rnder", (req, res) ->
         Y: labelNameY
         TITLE: graphTitle
         F: req.body.dataPath
-        D: "gif"
+        D: "pngcairo"
       exec "./c", {env:env}, (err, stdout, stderr) ->
         if err
           cb stderr
@@ -62,7 +62,7 @@ app.post "/rnder", (req, res) ->
     (files, cb) ->
       async.parallel {
         thumb: (cb) ->
-          exec "convert -loop 0 -delay 10 #{files.join(' ')} public/#{basename files[0]}.gif", (err, stdout, stderr) ->
+          exec "convert -loop 0 -delay 10 #{files.join(' ')} public/#{basename files[0]}.png", (err, stdout, stderr) ->
             if err
               cb stderr
             else
