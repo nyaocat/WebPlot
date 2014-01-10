@@ -19,6 +19,7 @@ $(function() {
         $("#rndMes").css("display", "block");
         return $("#rndMes").text(p.err);
       } else {
+        $("#ankt").css("display", "block");
         $("#myImg").css("display", "block");
         $("#myImg").attr("src", p.thumb);
         $("#dBtn").removeClass("disabled");
@@ -27,6 +28,14 @@ $(function() {
     }), "json");
     return false;
   };
+  $("#anktf").submit(function() {
+    var $form;
+    $form = $(this);
+    $("#anktf").css("display", "none");
+    $("#ankta").html('ご協力ありがとう御座いました');
+    $.post("/ankt", $form.serialize(), (function(p) {}), "json");
+    return false;
+  });
   $("#thatForm").submit(rff);
   return $("#dataFile").change(function() {
     $("#thatForm").unbind('submit');

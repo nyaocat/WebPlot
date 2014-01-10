@@ -5,6 +5,7 @@ path    = require "path"
 fs      = require "fs"
 app     = express()
 async   = require 'async'
+nodemailer    = require 'nodemailer'
 require 'coffee-script'
 
 # all environments
@@ -27,6 +28,17 @@ app.get '/', (req, res) ->
 
 app.get '/download/:file', (req, res) ->
   res.download "./public/#{req.params.file}"
+
+mail = nodemailer.mail
+
+app.post '/ankt', (req, res) ->
+  console.log req.body
+  mail
+    from: 'webplot@sakura.ikulab.org'
+    to: 'n@nyaocat.jp'
+    subject: 'WebPlot アンケート'
+    text: req.body.ankt
+  res.send 'ok'
 
 app.post "/upp", (req, res) ->
   console.log req.files
