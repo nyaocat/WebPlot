@@ -1,4 +1,5 @@
 $ ->
+  socket = io.connect()
   console.log "loaded"
   rff = -> false
   rndr =->
@@ -9,18 +10,21 @@ $ ->
     # $("#ankt").css "display", "none"
     $("#rndMes").css "display", "none"
     $("#dBtn").addClass "disabled"
-    $.post "/rnder", $form.serialize(), ((p) ->
+    socket.emit 'rnder', $form.serialize()
+    socket.on 'rnders', (data) ->
+      $("#rndst").html data
+
+    socket.on 'rnderf', (data) ->
       $("#myBar").css "display", "none"
-      if p.err?
+      if data.err?
         $("#rndMes").css "display", "block"
         $("#rndMes").text p.err
       else
         $("#ankt").css "display", "block"
         $("#myImg").css "display", "block"
-        $("#myImg").attr "src", p.thumb
+        $("#myImg").attr "src", data.thumb
         $("#dBtn").removeClass "disabled"
-        $("#dBtn").attr "href", "/download/#{p.thumb}"
-    ), "json"
+        $("#dBtn").attr "href", "/download/#{data.thumb}"
     false
 
   $("#anktf").submit ->

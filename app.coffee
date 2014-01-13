@@ -7,6 +7,7 @@ app     = express()
 async   = require 'async'
 nodemailer    = require 'nodemailer'
 require 'coffee-script'
+querystring = require 'querystring'
 
 # all environments
 app.set "port", process.env.PORT or 8000
@@ -54,40 +55,42 @@ app.post "/upp", (req, res) ->
 basename = (str) ->
   (str.match /\/([^\.\/]*)\.*[^\/\.]*$/)[1]
 
-app.post "/rnder", (req, res) ->
-  console.log req.body
-  {labelNameX, labelNameY, graphTitle} = req.body
-  async.waterfall [
-    (cb) ->
-      env =
-        X: labelNameX
-        Y: labelNameY
-        TITLE: graphTitle
-        F: req.body.dataPath
-        D: "pngcairo"
-      exec "./c", {env:env}, (err, stdout, stderr) ->
-        if err
-          cb stderr
-        else
-          console.log stdout
-          cb null, stdout.split(',')
-    (files, cb) ->
-      async.parallel {
-        thumb: (cb) ->
-          exec "convert -loop 0 -delay 10 #{files.join(' ')} public/#{basename files[0]}.gif", (err, stdout, stderr) ->
-            if err
-              cb stderr
-            else
-              cb null, "#{basename files[0]}.gif",
-        orig:  (cb) ->
-          cb null, "anim.gif"
-      }, cb
-  ], (err, ret) ->
-      if err?
-        res.send {err: JSON.stringify err}
-      else
-        res.json ret
-
-http.createServer(app).listen app.get("port"), ->
+server = http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
 
+io = require('socket.io').listen(server)
+
+io.sockets.on 'connection', (socket) ->
+  socket.on 'rnder', (data) ->
+    data = querystring.parse data
+    {labelNameX, labelNameY, graphTitle} = data
+    async.waterfall [
+      (cb) ->
+        env =
+          X: labelNameX
+          Y: labelNameY
+          TITLE: graphTitle
+          F: data.dataPath
+          D: "pngcairo"
+        exec "./c", {env:env}, (err, stdout, stderr) ->
+          if err
+            cb stderr
+          else
+            console.log stdout
+            cb null, stdout.split(',')
+      (files, cb) ->
+        async.parallel {
+          thumb: (cb) ->
+            exec "convert -loop 0 -delay 10 #{files.join(' ')} public/#{basename files[0]}.gif", (err, stdout, stderr) ->
+              if err
+                cb stderr
+              else
+                cb null, "#{basename files[0]}.gif",
+          orig:  (cb) ->
+            cb null, "anim.gif"
+        }, cb
+    ], (err, ret) ->
+        if err?
+          socket.emit 'rnderf', {err: JSON.stringify err}
+        else
+          socket.emit 'rnderf', ret

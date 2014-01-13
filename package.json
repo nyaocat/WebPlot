@@ -9,6 +9,7 @@
     "express": "3.2.6",
     "jade": "*",
     "async": "*",
-    "coffee-script": "*"
+    "coffee-script": "*",
+    "socket.io": "*"
   }
 }
