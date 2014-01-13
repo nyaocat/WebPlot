@@ -62,6 +62,7 @@ io = require('socket.io').listen(server)
 
 io.sockets.on 'connection', (socket) ->
   socket.on 'rnder', (data) ->
+    socket.emit 'rnders', "レンダリング中です……"
     data = querystring.parse data
     {labelNameX, labelNameY, graphTitle} = data
     async.waterfall [
@@ -79,6 +80,7 @@ io.sockets.on 'connection', (socket) ->
             console.log stdout
             cb null, stdout.split(',')
       (files, cb) ->
+        socket.emit 'rnders', "アニメーション生成中です……"
         async.parallel {
           thumb: (cb) ->
             exec "convert -loop 0 -delay 10 #{files.join(' ')} public/#{basename files[0]}.gif", (err, stdout, stderr) ->
