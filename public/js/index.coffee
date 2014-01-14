@@ -9,10 +9,18 @@ $ ->
     $("#myImg").css "display", "none"
     # $("#ankt").css "display", "none"
     $("#rndMes").css "display", "none"
+    $("#rndst").removeClass "alert-danger"
+    $("#rndst").addClass "alert-info"
+
     $("#dBtn").addClass "disabled"
     socket.emit 'rnder', $form.serialize()
     socket.on 'rnders', (data) ->
       $("#rndst").html data
+    socket.on 'rndere', (data) ->
+      $("#rndst").removeClass "alert-info"
+      $("#rndst").addClass "alert-danger"
+      $("#rndst").html data
+      $("#myBar").css "display", "none"
 
     socket.on 'rnderf', (data) ->
       $("#myBar").css "display", "none"

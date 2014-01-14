@@ -31,7 +31,7 @@ html
         | 複数ファイルをアップロードすると自動的にアニメーションになります．
         br
         | アニメーションはファイル名の昇順に行われます
-      .alert.alert-warning ファイル形式は全て一行一データ，X座標-Y座標-値の空白区切りである必要があります
+      .alert.alert-warning ファイル形式は全て一行一データ，"X座標 Y座標 値"の空白区切りである必要があります
       form#thatForm.form-horizontal(role='form')
         #Fields
           .form-group
@@ -48,10 +48,11 @@ html
               input#labelNameY.form-control(type='text', name='labelNameY', value='Y')
           .form-group
             label.col-lg-2.control-label(for='graphType') 描画グラフ種類
-            .col-lg-10.input-group
+            .col-lg-10
               select#graphType.form-control.input-lg(name='graphType')
-                option(value='p3',selected) 偽色
-              span.input-group-addon グラフ
+                option(value='p3',selected) 色付き等高線グラフ
+                option(value='p2',disabled) X-Y 折れ線グラフ
+                option(value='p1',disabled) ベクトルグラフ
           .form-group
             label.col-lg-2.control-label(for='dateFile') データファイル
               span.badge.pull-right 必須

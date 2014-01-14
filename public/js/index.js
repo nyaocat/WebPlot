@@ -13,10 +13,18 @@ $(function() {
     $("#myBar").css("display", "block");
     $("#myImg").css("display", "none");
     $("#rndMes").css("display", "none");
+    $("#rndst").removeClass("alert-danger");
+    $("#rndst").addClass("alert-info");
     $("#dBtn").addClass("disabled");
     socket.emit('rnder', $form.serialize());
     socket.on('rnders', function(data) {
       return $("#rndst").html(data);
+    });
+    socket.on('rndere', function(data) {
+      $("#rndst").removeClass("alert-info");
+      $("#rndst").addClass("alert-danger");
+      $("#rndst").html(data);
+      return $("#myBar").css("display", "none");
     });
     socket.on('rnderf', function(data) {
       $("#myBar").css("display", "none");
