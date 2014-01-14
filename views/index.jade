@@ -50,7 +50,9 @@ html
             label.col-lg-2.control-label(for='graphType') 描画グラフ種類
             .col-lg-10
               select#graphType.form-control.input-lg(name='graphType')
-                option(value='p3',selected) 色付き等高線グラフ
+                option(value='c2') 色付き等高線グラフ
+                option(value='c1',selected) 等高線グラフ
+                option(value='foo') エラーが起きる
                 option(value='p2',disabled) X-Y 折れ線グラフ
                 option(value='p1',disabled) ベクトルグラフ
           .form-group
@@ -72,14 +74,13 @@ html
           .modal-body
             img#myImg.img-thumbnail(src='', alt='プロットプレビュー', style='display:none;')
             span#rndMes
-            #myBar
-              #rndst.alert.alert-info グラフのプロットには数秒〜数十分掛かります．
-              .progress.progress-striped.active
-                .progress-bar(role='progressbar', aria-valuenow='100', aria-valuemin='0', aria-valuemax='100', style='width: 100%')
-                  span.sr-only グラフ生成中…
+            #rndst.alert.alert-info グラフのプロットには数秒〜数十分掛かります．
+            #myBar.progress.progress-striped.active
+              .progress-bar(role='progressbar', aria-valuenow='100', aria-valuemin='0', aria-valuemax='100', style='width: 100%')
+                span.sr-only グラフ生成中…
             #ankt
               #ankta.alert.alert-info
-                | アンケートにご協力下さい．
+                | アンケートにご協力お願いします。
               form#anktf.form-horizontal(role='form')
                 .form-group
                   label.col-lg-2.control-label(for='ankt')
@@ -88,9 +89,8 @@ html
                     |ご感想
                   .col-lg-10
                     textarea.form-control(name='ankt',rows='4',cols='60')
-                  .form-group
-                    .col-lg-offset-2.col-lg-10
-                      input.btn.btn-primary(type='submit',value='送信')
+                  .col-lg-offset-2.col-lg-10
+                    input.btn.btn-primary(type='submit',value='送信')
           .modal-footer
             button.btn.btn-default(type='button', data-dismiss='modal') 閉じる
             a#dBtn.btn.btn-primary.disabled(href='') ファイルをダウンロード

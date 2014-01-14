@@ -64,7 +64,11 @@ io.sockets.on 'connection', (socket) ->
   socket.on 'rnder', (data) ->
     socket.emit 'rnders', "レンダリング中です……"
     data = querystring.parse data
-    {labelNameX, labelNameY, graphTitle} = data
+    {labelNameX, labelNameY, graphTitle, graphType} = data
+    unless (graphType is "c1") or (graphType is "c2")
+      return setTimeout ->
+        socket.emit 'rndere', "認識されないグラフタイプ指定です"
+      , 1000
     async.waterfall [
       (cb) ->
         env =
@@ -73,7 +77,7 @@ io.sockets.on 'connection', (socket) ->
           TITLE: graphTitle
           F: data.dataPath
           D: "pngcairo"
-        exec "./c", {env:env}, (err, stdout, stderr) ->
+        exec "./#{graphType}", {env:env}, (err, stdout, stderr) ->
           if err
             cb stderr
           else
@@ -93,6 +97,6 @@ io.sockets.on 'connection', (socket) ->
         }, cb
     ], (err, ret) ->
         if err?
-          socket.emit 'rnderf', {err: JSON.stringify err}
+          socket.emit 'rndere', JSON.stringify(err)
         else
           socket.emit 'rnderf', ret

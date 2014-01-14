@@ -11,6 +11,7 @@ $(function() {
     $("#myModal").modal("toggle");
     $form = $(this);
     $("#myBar").css("display", "block");
+    $("#rndst").css("display", "block");
     $("#myImg").css("display", "none");
     $("#rndMes").css("display", "none");
     $("#rndst").removeClass("alert-danger");
@@ -21,6 +22,7 @@ $(function() {
       return $("#rndst").html(data);
     });
     socket.on('rndere', function(data) {
+      console.log("えらーだよっ" + data);
       $("#rndst").removeClass("alert-info");
       $("#rndst").addClass("alert-danger");
       $("#rndst").html(data);
@@ -28,16 +30,12 @@ $(function() {
     });
     socket.on('rnderf', function(data) {
       $("#myBar").css("display", "none");
-      if (data.err != null) {
-        $("#rndMes").css("display", "block");
-        return $("#rndMes").text(p.err);
-      } else {
-        $("#ankt").css("display", "block");
-        $("#myImg").css("display", "block");
-        $("#myImg").attr("src", data.thumb);
-        $("#dBtn").removeClass("disabled");
-        return $("#dBtn").attr("href", "/download/" + data.thumb);
-      }
+      $("#rndst").css("display", "none");
+      $("#ankt").css("display", "block");
+      $("#myImg").css("display", "block");
+      $("#myImg").attr("src", data.thumb);
+      $("#dBtn").removeClass("disabled");
+      return $("#dBtn").attr("href", "/download/" + data.thumb);
     });
     return false;
   };
