@@ -65,7 +65,7 @@ io.sockets.on 'connection', (socket) ->
     socket.emit 'rnders', "レンダリング中です……"
     data = querystring.parse data
     {labelNameX, labelNameY, graphTitle, graphType} = data
-    unless (graphType is "c1") or (graphType is "c2")
+    unless (graphType is "c1") or (graphType is "c2") or (graphType is "l1")
       return setTimeout ->
         socket.emit 'rndere', "認識されないグラフタイプ指定です"
       , 1000

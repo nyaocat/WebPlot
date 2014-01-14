@@ -1,5 +1,5 @@
 
-all: c1 c2
+all: c1 c2 l1
 
 
 l1:l1.cpp
