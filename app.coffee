@@ -24,8 +24,14 @@ app.use express.static(path.join(__dirname, "public"))
 # development only
 app.use express.errorHandler()  if "development" is app.get("env")
 
-app.get '/', (req, res) ->
-  res.render 'index'
+navdata = [
+    { path: '/'         , str:  'ホーム'  }
+    { path: '/howtouse' , str:  '使い方'  }
+    { path: '/plot'     , str:  'プロット'}
+]
+app.get '/',         (req, res) ->  res.render 'index',    {current: 0, nav: navdata}
+app.get '/howtouse', (req, res) ->  res.render 'howtouse', {current: 1, nav: navdata}
+app.get '/plot',     (req, res) ->  res.render 'plot',     {current: 2, nav: navdata}
 
 app.get '/download/:file', (req, res) ->
   res.download "./public/#{req.params.file}"

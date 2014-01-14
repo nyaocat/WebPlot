@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  .container
+    h1.page-header 使い方
+
+    h2
+      | 1.
+      a(href='/plot')プロットページ
+      | を開きます
+
+    h2 2.フォームの項目を設定します．
+    .alert.alert-info
+      | グラフタイトル，X軸ラベル名，Y軸ラベル名は
+      | 空白でも大丈夫です．
+    .alert.alert-danger
+      | 現在グラフタイトル，X軸ラベル名，Y軸ラベル名の項目において
+      | 日本語は使用出来ません．
+
+    h2 3.データファイルをアップロードします．
+    .alert.alert-info
+      p
+        | 以下にサンプルデータファイルを詰め合わせた圧縮ファイルを用意しました．
+        br
+        | データをダウンロードし，中に入っているデータファイルを使うことによって
+        | 簡単にWebPlotを試すことが出来ます．
+      .btn-group.btn-group-justified
+        a.btn.btn-primary(href='/sample/webplot_sample_data.zip') サンプルデータファイルセット(for Windows)
+        a.btn.btn-primary(href='/sample/webplot_sample_data.tar.gz') サンプルデータファイルセット(for Linux, OSX)
+
+    .alert.alert-info
+      | ここで複数ファイルをまとめてアップロードすると，
+      | 生成結果はアップロードされたファイル全てのプロット結果を結合したアニメーションになります．
+    .alert.alert-warning
+      | 多くのファイルをアップロードすると，
+      | アップロードにもプロットにも多くの時間が掛かります．
+
+    h2 5.プロットが完了すると，画面に結果が表示されます．
+
+
+

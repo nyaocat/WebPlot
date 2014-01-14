@@ -1,100 +1,83 @@
-html
-  head
-    title WebPlot
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    // Bootstrap
-    link(href='/css/bootstrap.min.css', rel='stylesheet', media='screen')
-    // HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries
-    //if lt IE 9
-    script(src='/assets/js/html5shiv.js')
-    script(src='/assets/js/respond.min.js')
-    // jQuery (necessary for Bootstrap's JavaScript plugins)
-    script(src='/assets/js/jquery.js')
-    script(src='/js/jquery.upload-1.0.2.js')
-    script(src='/socket.io/socket.io.js')
-    script(src='/js/index.js')
-    style(type='text/css')
-      body { padding-top: 50px; }
-  body
-    .jumbotron
-      .container
-        h1 WebPlot
-        p
-          | WebPlotへようこそ.
-          br
-          | ブラウザ上からグラフのプロット・アニメーション生成を行えるサービスです．
-        p
-          a.btn.btn-info.btn-lg(href='https://github.com/nyaocat/WebPlot') View It On Github
+extends layout
 
+
+block content
+  .jumbotron
     .container
-      .alert.alert-info
-        | 複数ファイルをアップロードすると自動的にアニメーションになります．
+      h1 WebPlot
+      p
+        | WebPlotへようこそ.
         br
-        | アニメーションはファイル名の昇順に行われます
-      .alert.alert-warning ファイル形式は全て一行一データ，"X座標 Y座標 値"の空白区切りである必要があります
-      form#thatForm.form-horizontal(role='form')
-        #Fields
-          .form-group
-            label.col-lg-2.control-label(for='graphTitle') グラフのタイトル
-            .col-lg-10
-              input#graphTitle.form-control(type='text', name='graphTitle', value='Graph Title')
-          .form-group
-            label.col-lg-2.control-label(for='labelNameX') X軸のラベル名
-            .col-lg-10
-              input#labelNameX.form-control(type='text', name='labelNameX', value='X')
-          .form-group
-            label.col-lg-2.control-label(for='labelNameY') Y軸のラベル名
-            .col-lg-10
-              input#labelNameY.form-control(type='text', name='labelNameY', value='Y')
-          .form-group
-            label.col-lg-2.control-label(for='graphType') 描画グラフ種類
-            .col-lg-10
-              select#graphType.form-control.input-lg(name='graphType')
-                option(value='c2',selected) 色付き等高線グラフ
-                option(value='c1') 等高線グラフ
-                option(value='l1') X-Y 折れ線グラフ
-                option(value='v1') ベクトルグラフ
-          .form-group
-            label.col-lg-2.control-label(for='dateFile') データファイル
-              span.badge.pull-right 必須
-              span.badge.pull-right 複数ファイル可
-            .col-lg-10
-              input#dataFile.form-control(type='file', name='dataFile', multiple='multiple')
-            input#dataPath(type='hidden', name='dataPath', value='')
-        .form-group
-          .col-lg-offset-2.col-lg-10
-            button#thatSubmit.btn.btn-primary.disabled.btn-block(type='submit') プロット実行
-    #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-      .modal-dialog
-        .modal-content
-          .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h4.modal-title 生成結果
-          .modal-body
-            img#myImg.img-thumbnail(src='', alt='プロットプレビュー', style='display:none;')
-            span#rndMes
-            #rndst.alert.alert-info グラフのプロットには数秒〜数十分掛かります．
-            #myBar.progress.progress-striped.active
-              .progress-bar(role='progressbar', aria-valuenow='100', aria-valuemin='0', aria-valuemax='100', style='width: 100%')
-                span.sr-only グラフ生成中…
-            #ankt
-              #ankta.alert.alert-info
-                | アンケートにご協力お願いします。
-              form#anktf.form-horizontal(role='form')
-                .form-group
-                  label.col-lg-2.control-label(for='ankt')
-                    |ご意見
-                    br
-                    |ご感想
-                  .col-lg-10
-                    textarea.form-control(name='ankt',rows='4',cols='60')
-                  .col-lg-offset-2.col-lg-10
-                    input.btn.btn-primary(type='submit',value='送信')
-          .modal-footer
-            button.btn.btn-default(type='button', data-dismiss='modal') 閉じる
-            a#dBtn.btn.btn-primary.disabled(href='') ファイルをダウンロード
-        // /.modal-content
-      // /.modal-dialog
-    // /.modal
-    // Include all compiled plugins (below), or include individual files as needed
-    script(src='/js/bootstrap.min.js')
+        | ブラウザ上からグラフのプロット・アニメーション生成を行えるサービスです．
+      .btn-group.btn-group-justified
+        a.btn.btn-primary.btn-lg(href='/plot') プロットを行う
+        a.btn.btn-info.btn-lg(href='/howtouse') 使い方
+      p
+        a.btn.btn-link(href='https://github.com/nyaocat/WebPlot') View It On Github
+
+  .container
+    .row
+      .col-sm-6.col-md-4
+        a.thumbnail(href='#',data-toggle='modal',data-target='#myModal1')
+          img(src='sample/shade.png')
+      .col-sm-6.col-md-4
+        a.thumbnail(href='#',data-toggle='modal',data-target='#myModal2')
+          img(src='sample/cont.png')
+      .col-sm-6.col-md-4
+        a.thumbnail(href='#',data-toggle='modal',data-target='#myModal3')
+          img(src='sample/vector.png')
+      .col-sm-6.col-md-4
+        a.thumbnail(href='#',data-toggle='modal',data-target='#myModal4')
+          img(src='sample/line.png')
+
+
+
+  #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel1', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+          h4#myModalLabel1.modal-title "色つき等高線グラフ"の描画例
+        .modal-body
+          .container
+            img(src='sample/shade.png',width='100%')
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+
+  #myModal2.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel2', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+          h4#myModalLabel2.modal-title "等高線グラフ"の描画例
+        .modal-body
+          .container
+            img(src='sample/cont.png',width='100%')
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+
+  #myModal3.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel3', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+          h4#myModalLabel3.modal-title "ベクトルグラフ"の描画例
+        .modal-body
+          .container
+            img(src='sample/vector.png',width='100%')
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+
+  #myModal4.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel4', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+          h4#myModalLabel4.modal-title "X-Y 折れ線グラフ"の描画例
+        .modal-body
+          .container
+            img(src='sample/line.png',width='100%')
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+
+  script(src='/js/bootstrap.min.js')
