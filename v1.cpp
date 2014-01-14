@@ -10,9 +10,6 @@
 #include <string>
 #include "plstream.h"
 
-// std::ofstream ofs("dbg");
-
-
 using namespace std;
 
 vector<string> split(const string &str, char delim){
@@ -31,7 +28,8 @@ std::string basename(const std::string& path) {
 
 struct DataOpts
 {
-  int nummax;
+  int nx;
+  int ny;
   double xmin;
   double xmax;
   double ymin;
@@ -40,27 +38,50 @@ struct DataOpts
 
 DataOpts filecheck(std::vector<string> const& fs)
 {
-  DataOpts opts = {0, 0, 0, 0, 0};
+  DataOpts opts = {0, 0, 0, 0, 0, 0};
+
+  set<double> xs, ys, xs_, ys_;
+
+  bool isfirst = true;
 
   for (std::vector<string>::const_iterator it = fs.begin(); it != fs.end(); ++it)
   {
     std::string const& f = *it;
+    xs_.clear(); ys_.clear();
 
     std::ifstream ifs(f.c_str());
-    int num;
     while (ifs)
     {
-      double x, y;
-      ifs >> x >> y;
+      double x, y, u, v;
+      ifs >> x >> y >> u >> v;
 
       opts.xmin = std::min(opts.xmin, x);
       opts.ymin = std::min(opts.ymin, y);
       opts.xmax = std::max(opts.xmax, x);
       opts.ymax = std::max(opts.ymax, y);
-      ++num;
+
+      xs_.insert(x);
+      ys_.insert(y);
     }
-    opts.nummax = std::max(opts.nummax, num);
+
+    if (isfirst)
+    {
+      isfirst = false;
+    }
+    else
+    {
+      if (xs.size() != xs_.size() || ys.size() != ys_.size())
+      {
+        std::cerr << "X要素数とY要素数が一致しません：ファイルのエラー" << std::endl;
+      }
+    }
+    xs.swap(xs_);
+    ys.swap(ys_);
   }
+
+  opts.nx = xs.size();
+  opts.ny = ys.size();
+
   return opts;
 }
 
@@ -93,24 +114,45 @@ void plot( int argc, const char ** argv, char const* device, char const* inpath,
     double xmax=opts.xmax;
     double ymin=opts.ymin;
     double ymax=opts.ymax;
-    std::vector<double> ax; ax.reserve(opts.nummax);
-    std::vector<double> ay; ay.reserve(opts.nummax);
-    int num = 0;
+    int nx = opts.nx;
+    int ny = opts.ny;
+    // Allocate arrays
+    PLFLT **us;
+    PLFLT **vs;
+    pls->Alloc2dGrid(&us,nx,ny);
+    pls->Alloc2dGrid(&vs,nx,ny);
+    PLcGrid2  cgrid2;//PLcGrid2  xg,yg,nx,ny
+    pls->Alloc2dGrid(&cgrid2.xg,nx,ny);
+    pls->Alloc2dGrid(&cgrid2.yg,nx,ny);
+    cgrid2.nx=nx;
+    cgrid2.ny=ny;
     {
       std::ifstream ifs(inpath);
-      double x, y;
-      while (ifs >> x >> y){
-        ax.push_back(x);
-        ay.push_back(y);
-        ++num;
+      for(int i=0;i<nx;i++){
+        for(int j=0;j<ny;j++){
+          double x, y, u, v;
+          ifs >> x >> y >> u >> v;
+          cgrid2.xg[i][j] = x;
+          cgrid2.yg[i][j] = y;
+          us[i][j]         = u;
+          vs[i][j]         = v;
+        }
       }
     }
+
 
     //Plot
     pls->col0(15);
     pls->env(xmin,xmax,ymin,ymax,1,0);
     pls->lab(getenv("X"),getenv("Y"),getenv("TITLE"));
-    pls->line(num,ax.data(),ay.data());
+    pls->vect(us,vs,nx,ny,0.0, plstream::tr2, (void *) &cgrid2 );
+
+    //Free grid
+    pls->Free2dGrid(cgrid2.xg,nx,ny);
+    pls->Free2dGrid(cgrid2.yg,nx,ny);
+    pls->Free2dGrid(us,nx,ny);
+    pls->Free2dGrid(vs,nx,ny);
+
     delete pls;
   }
 }

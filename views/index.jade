@@ -50,11 +50,10 @@ html
             label.col-lg-2.control-label(for='graphType') 描画グラフ種類
             .col-lg-10
               select#graphType.form-control.input-lg(name='graphType')
-                option(value='c2') 色付き等高線グラフ
-                option(value='c1',selected) 等高線グラフ
-                option(value='foo') エラーが起きる
+                option(value='c2',selected) 色付き等高線グラフ
+                option(value='c1') 等高線グラフ
                 option(value='l1') X-Y 折れ線グラフ
-                option(value='p1',disabled) ベクトルグラフ
+                option(value='v1') ベクトルグラフ
           .form-group
             label.col-lg-2.control-label(for='dateFile') データファイル
               span.badge.pull-right 必須
