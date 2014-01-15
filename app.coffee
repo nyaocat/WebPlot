@@ -48,7 +48,7 @@ app.post '/ankt', (req, res) ->
     from: 'webplot@sakura.ikulab.org'
     to: 'n@nyaocat.jp'
     subject: 'WebPlot アンケート'
-    text: req.body.ankt
+    text: JSON.stringify req.body
   res.send 'ok'
 
 app.post "/upp", (req, res) ->

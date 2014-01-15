@@ -59,12 +59,87 @@ block content
               | アンケートにご協力お願いします。
             form#anktf.form-horizontal(role='form')
               .form-group
-                label.col-lg-2.control-label(for='ankt')
-                  |ご意見
-                  br
-                  |ご感想
+                label.control-label(for='ankt-q1')
+                  | このプロットツールは自分でプロットツールを用いるのと比べ少ない労力で扱えましたか
+                #ankt-q1
+                  .radio
+                    label
+                      input(type='radio',name='q1',value='5')
+                      | とてもそうおもう
+                  .radio
+                    label
+                      input(type='radio',name='q1',value='4')
+                      | そうおもう
+                  .radio
+                    label
+                      input(type='radio',name='q1',value='3')
+                      | どちらともいえない
+                  .radio
+                    label
+                      input(type='radio',name='q1',value='2')
+                      | 思わない
+                  .radio
+                    label
+                      input(type='radio',name='q1',value='1')
+                      | 全くそう思わない
+              .form-group
+                label.control-label(for='ankt-q2')
+                  | このツールは直感的に扱えましたか
+                #ankt-q2
+                  .radio
+                    label
+                      input(type='radio',name='q2',value='5')
+                      | とてもそうおもう
+                  .radio
+                    label
+                      input(type='radio',name='q2',value='4')
+                      | そうおもう
+                  .radio
+                    label
+                      input(type='radio',name='q2',value='3')
+                      | どちらともいえない
+                  .radio
+                    label
+                      input(type='radio',name='q2',value='2')
+                      | 思わない
+                  .radio
+                    label
+                      input(type='radio',name='q2',value='1')
+                      | 全くそう思わない
+              .form-group
+                label.control-label(for='ankt-q3')
+                  | これを使って生成したグラフを自身の論文等で使用したいと考えますか
+                #ankt-q3
+                  .radio
+                    label
+                      input(type='radio',name='q3',value='5')
+                      | とてもそうおもう
+                  .radio
+                    label
+                      input(type='radio',name='q3',value='4')
+                      | そうおもう
+                  .radio
+                    label
+                      input(type='radio',name='q3',value='3')
+                      | どちらともいえない
+                  .radio
+                    label
+                      input(type='radio',name='q3',value='2')
+                      | 思わない
+                  .radio
+                    label
+                      input(type='radio',name='q3',value='1')
+                      | 全くそう思わない
+              .form-group
+                label
+                  | 改善して欲しい点があればご記入下さい
                 .col-lg-10
-                  textarea.form-control(name='ankt',rows='4',cols='60')
+                  textarea#ankt.form-control(name='anktt',rows='2',cols='60')
+              .form-group
+                label.control-label(for='ankt')
+                  | 他，何かご意見・ご感想があればお書き下さい
+                .col-lg-10
+                  textarea#ankt.form-control(name='ankt',rows='4',cols='60')
                 .col-lg-offset-2.col-lg-10
                   input.btn.btn-primary(type='submit',value='送信')
         .modal-footer
