@@ -3,6 +3,7 @@ c1
 c2
 l1
 v1
+log
 public/*.png
 public/*.gif
 !public/sample/*.png
