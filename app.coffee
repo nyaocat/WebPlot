@@ -18,6 +18,9 @@ app.use express.logger("dev")
 app.use express.bodyParser
   uploadDir : "/tmp"
 app.use express.methodOverride()
+app.use (req, res, next) ->
+  console.log [req.headers["x-forwarded-for"] or req.client.remoteAddress, new Date().toLocaleString(), req.method, req.url, res.statusCode, req.headers.referer or "-", req.headers["user-agent"] or "-"].join("\t")
+  next()
 app.use app.router
 app.use express.static(path.join(__dirname, "public"))
 
