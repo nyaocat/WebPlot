@@ -3,7 +3,7 @@ WebPlot
 
 ブラウザ上でプロットを行えるサービス
 
-http://sakura.ikulab.org:8000/
+http://rodin.ikulab.org:8000/
 
 
 
