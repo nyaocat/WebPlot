@@ -3,8 +3,8 @@ WebPlot
 
 ブラウザ上でプロットを行えるサービス
 
-http://rodin.ikulab.org:8000/
-
+~~http://rodin.ikulab.org:8000/~~
+（現在動作させていません）
 
 
 ## 必要なもの
